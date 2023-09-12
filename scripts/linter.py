@@ -32,6 +32,9 @@ def lint(report, team_name, source_org, internal_org):
         # Replace any '&' in finding headings with 'and'
         new_line = replace_ampersand_in_findings_headings(new_line)
 
+        # Replace any double backslashes with single backslashes (GitHub MathJax to LaTeX)
+        new_line = new_line.replace('\\\\', '\\')
+
         report[report.index(line)] = new_line
 
     # Check for link structures ( format [something](url) ) that don't start with http

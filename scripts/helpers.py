@@ -96,8 +96,10 @@ def markdown_heading_to_latex_hypertarget(heading):
 
 
 def format_inline_code(text):
-    # Find sections within backticks and wrap them with \texttt{}
-    return re.sub(r'`([^`]+)`', r'\\texttt{\1}', text)
+    # Find sections within backticks and wrap them with \texttt{} while also escaping underscores
+    return re.sub(r'`([^`]+)`', 
+                  lambda m: '\\texttt{' + m.group(1).replace('_', '\\_') + '}',
+                  text)
 
 
 def calculate_period(review_timeline):
