@@ -54,18 +54,19 @@ export GITHUB_TOKEN=your-github-token
 
 Check contents and **manually update** the following files in `source/`:
 
-- `summary_information.conf`: Information to be replaced in the title page and the summary.
-- `lead_auditors.md`: List of lead auditors who participated during the engagement.
-- `assisting_auditors.md` : List of lead auditors who participated during the engagement.
 - `about_cyfrin.md`: Cyfrin description.
-- `disclaimer.md`: Information about the audit review process.
-- `protocol_summary.md`: Information about the protocol.
 - `additional_comments.md`: For extra information at the end of the report. It is commented by DEFAULT, please change if required.
 - `appendix.md`: For extra information at the end of the report. It is commented by DEFAULT, please change if required.
+- `assisting_auditors.md`: List of lead auditors who participated during the engagement.
+- `audit_scope.md`: Information about the audit scope, including relevant files, commit hashes and pull requests.
+- `disclaimer.md`: Information about the audit review process.
+- `lead_auditors.md`: List of lead auditors who participated during the engagement.
+- `protocol_summary.md`: Information about the protocol.
+- `summary_information.conf`: Information to be replaced in the title page and the summary.
 
 All `.md` files can be formatted and will be converted to LaTeX by the scripts located in `scripts/`.
 
-The `.conf` files store text-only information, and are replaced verbatim in the final report. This means all
+The `.conf` files store text-only information and are replaced verbatim in the final report. This means all
 formatting should be removed, as the template already contains formatting.
 
 ### Generate report
@@ -89,7 +90,7 @@ By default, there are `.gitignore` rules in place to avoid tracking the followin
 
 ### Additional notes
 
-This tool can be used stand-alone but is primarily intended to be used alongside [`audit-repo-cloner`(https://github.com/Cyfrin/audit-repo-cloner)], another tool which will take a repository for audit and create a private copy prepared for Cyfrin audit. This repo is installed as a subtree of the cloned audit repo and makes use of GitHub Actions to automatically generate the report.
+This tool can be used stand-alone but is primarily intended to be used alongside [`audit-repo-cloner`(https://github.com/Cyfrin/audit-repo-cloner)], another tool that will take a repository for audit and create a private copy prepared for Cyfrin audit. This repo is installed as a subtree of the cloned audit repo and makes use of GitHub Actions to automatically generate the report.
 
 If intending to use this tool on its own, be sure to consider the public visibility of this repository and the security implications if the final report will contain sensitive information. If this is the case, it is recommended to create a private copy of this repository as forks are public by default.
 
