@@ -84,13 +84,13 @@ deleted after the report is generated.
 
 By default, there are `.gitignore` rules in place to avoid tracking the following:
 
-- Any file in `working` (Except its own `.gitignore`)
-- Any file in `output` (Except its own `.gitignore`)
+- Any file in `working` (except its own `.gitignore`)
+- Any file in `output` (except its own `.gitignore`)
 - `source/report.md` and `source/severity_counts.conf` as they are automatically generated
 
 ### Additional notes
 
-This tool can be used stand-alone but is primarily intended to be used alongside [`audit-repo-cloner`(https://github.com/Cyfrin/audit-repo-cloner)], another tool that will take a repository for audit and create a private copy prepared for Cyfrin audit. This repo is installed as a subtree of the cloned audit repo and makes use of GitHub Actions to automatically generate the report.
+This tool can be used stand-alone but is primarily intended to be used alongside [`audit-repo-cloner`](https://github.com/Cyfrin/audit-repo-cloner), another tool that will take a repository for audit and create a private copy prepared for Cyfrin audit. This repo is installed as a subtree of the cloned audit repo and makes use of GitHub Actions to automatically generate the report.
 
 If intending to use this tool on its own, be sure to consider the public visibility of this repository and the security implications if the final report will contain sensitive information. If this is the case, it is recommended to create a private copy of this repository as forks are public by default.
 
