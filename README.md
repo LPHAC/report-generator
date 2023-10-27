@@ -60,6 +60,7 @@ Check contents and **manually update** the following files in `source/`:
 - `assisting_auditors.md`: List of lead auditors who participated during the engagement.
 - `audit_scope.md`: Information about the audit scope, including relevant files, commit hashes and pull requests.
 - `disclaimer.md`: Information about the audit review process.
+- `executive_summary.md`: Information about the audit findings and other executive comments.
 - `lead_auditors.md`: List of lead auditors who participated during the engagement.
 - `protocol_summary.md`: Information about the protocol.
 - `summary_information.conf`: Information to be replaced in the title page and the summary.
