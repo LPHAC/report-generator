@@ -15,7 +15,8 @@ severity_count_data = helpers.get_severity_counts()
 REPLACE_TITLE = [["__PLACEHOLDER__PROJECT_NAME", summary_data['project_name']],
                  ["__PLACEHOLDER__REPORT_VERSION", summary_data['report_version']]]
 
-source_org, repo_name = re.search(r'/(?P<org_name>[^/]+)/([^/.]+)(?:\.git)?$', summary_data['project_github']).groups()
+source_org, source_repo_name = re.search(r'/(?P<org_name>[^/]+)/([^/.]+)(?:\.git)?$', summary_data['project_github']).groups()
+internal_org, internal_repo_name = re.search(r'/(?P<org_name>[^/]+)/([^/.]+)(?:\.git)?$', summary_data['private_github']).groups()
 
 # Information from summary_information.conf, inserted in Summary section -> summary.tex file
 REPLACE_SUMMARY = [["__PLACEHOLDER__REVIEW_LENGTH", str(helpers.calculate_period(summary_data['review_timeline']))],
@@ -23,7 +24,7 @@ REPLACE_SUMMARY = [["__PLACEHOLDER__REVIEW_LENGTH", str(helpers.calculate_period
                    ["__PLACEHOLDER__TEAM_WEBSITE", summary_data['team_website']],
                    ["__PLACEHOLDER__PROJECT_NAME", summary_data['project_name']],
                    ["__PLACEHOLDER__REPO_LINK", summary_data['project_github']],
-                   ["__PLACEHOLDER__REPO_NAME", repo_name],
+                   ["__PLACEHOLDER__REPO_NAME", source_repo_name],
                    ["__PLACEHOLDER__COMMIT_HASH_LINK", re.sub(r'(\.git)?$', '', summary_data['project_github']) + "/blob/" + summary_data['commit_hash']],
                    ["__PLACEHOLDER__COMMIT_HASH", summary_data['commit_hash']],
                    ["__PLACEHOLDER__AUDIT_TIMELINE", summary_data['review_timeline']],
@@ -44,7 +45,7 @@ REPLACE_SEVERITIES = [["__PLACEHOLDER__ISSUE_CRITICAL_COUNT", severity_count_dat
 # Lint the report.md
 print("Linting the report.md file ...")
 report = helpers.get_file_contents(helpers.SOURCE_REPORT)
-report = linter.lint(report, summary_data['team_name'], source_org, "Cyfrin")
+report = linter.lint(report, summary_data['team_name'], source_org, source_repo_name, internal_org, internal_repo_name)
 helpers.save_file_contents(helpers.SOURCE_REPORT, report)
 print(f"Done.\n")
 

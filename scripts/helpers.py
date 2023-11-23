@@ -6,6 +6,7 @@ from os.path import exists as check_file
 import os
 import re
 import subprocess
+from .linter import replace_ampersand_in_findings_headings
 
 # Define file paths
 SOURCE_PATH = './source/'
@@ -220,11 +221,12 @@ def get_issues(repository, github):
 
         # Iterate through all findings for the current severity
         for counter, (issue_title, status_label) in enumerate(summary_of_findings[label], start=1):
-            latex_hypertarget = markdown_heading_to_latex_hypertarget("### " + issue_title)
-            prefixed_title = f"\hyperlink{{{latex_hypertarget}}}{{[{prefix}{str(counter).zfill(fill)}] {format_inline_code(issue_title)}}}"
+            linted_title = replace_ampersand_in_findings_headings(issue_title)
+            latex_hypertarget = markdown_heading_to_latex_hypertarget("### " + linted_title)
+            prefixed_title = f"\hyperlink{{{latex_hypertarget}}}{{[{prefix}{str(counter).zfill(fill)}] {format_inline_code(linted_title)}}}"
             status_label = status_label.replace("Report Status: ", "")
             summary_findings_table += f"{prefixed_title} & {status_label} \\\\\n\hline"
-            mitigation_table += f"\"{issue_title}\",{status_label},,\n"
+            mitigation_table += f"\"{linted_title}\",{status_label},,\n"
 
     # Replace the placeholder in the SUMMARY_TEX file
     placeholder_start = "% __PLACEHOLDER__SUMMARY_OF_FINDINGS_START"

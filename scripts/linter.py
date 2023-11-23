@@ -1,14 +1,19 @@
 import re
 
 
-def replace_org_in_link(line, internal_org, source_org):    
+def replace_org_in_link(line, internal_org, internal_repo_name, source_org, source_repo_name):
     # Identify all links
     links = re.findall('https?://[^\s<>"]+|[^\s<>"]+\.[^\s<>"]+', line)
 
     for link in links:
         if re.search(internal_org, link, re.IGNORECASE):
-            # Replace internal organization link with source repo link (case-insensitive)
+            # Replace internal organization with source organization
             new_link = re.sub(internal_org, source_org, link, flags=re.IGNORECASE)
+
+            # Replace internal repository name with source repository name, if different
+            if source_repo_name != internal_repo_name:
+                new_link = re.sub(internal_repo_name, source_repo_name, new_link, flags=re.IGNORECASE)
+            
             line = line.replace(link, new_link)
 
     return line
@@ -22,12 +27,12 @@ def replace_ampersand_in_findings_headings(line):
     return line
 
 
-def lint(report, team_name, source_org, internal_org):
+def lint(report, team_name, source_org, source_repo_name, internal_org, internal_repo_name,):
     for line in report:
         new_line = line
         
         # Replace any internal organization repo links
-        new_line = replace_org_in_link(new_line, internal_org, source_org)
+        new_line = replace_org_in_link(new_line, internal_org, internal_repo_name, source_org, source_repo_name)
         
         # Replace any '&' in finding headings with 'and'
         new_line = replace_ampersand_in_findings_headings(new_line)
