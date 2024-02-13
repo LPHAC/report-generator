@@ -1,41 +1,23 @@
 \newlength{\logoWidth}
-\setlength{\logoWidth}{0.6\textwidth}
+\setlength{\logoWidth}{0.5\textwidth}
 
 \begin{titlepage}
-  \vbox{}
-  \vbox{}
+  \normalsize % Restore the text size
+  \vbox to 1cm{\vfill}
 
-  \begin{center}
-  
-    % Check if the page has more content than can fit on a single page
-    \ifdim\pagegoal>\maxdimen
-      % Apply adjustments for multiple pages
-      \vspace*{2cm} % Adjust the vertical spacing as needed
-      \noindent\makebox[\linewidth]{\rule{.7\paperwidth}{.6pt}}\\[0.7cm]
-      {\huge \bfseries Summary of Findings}\\
-      \noindent\makebox[\linewidth]{\rule{.7\paperwidth}{.6pt}}\\[0.7cm]
-      \normalsize % Restore the text size
-      
-      \includegraphics[width=\logoWidth]{img/cyfrin-logo.png} % Adjust the graphic size as needed
-      
-      \vfill
-      \else
-      % Apply adjustments for single page
-      \vfill
-      
-      \includegraphics[scale=0.25]{img/cyfrin-logo.png} % Adjust the graphic size as needed
-      
-      \vfill
-    \fi
+  \begin{center}    
+    \includegraphics[width=\logoWidth]{img/cyfrin-logo.png} % Adjust the graphic size as needed
+    
+    \vspace{1cm}
 
     % Title
-    \noindent\makebox[\linewidth]{\rule{.7\paperwidth}{.6pt}}\\[0.7cm]
+    \noindent\makebox[\linewidth]{\rule{.75\paperwidth}{.6pt}}\\[0.7cm]
 
     {\huge \bfseries
       __PLACEHOLDER__PROJECT_NAME Audit Report
     }\\[0.25cm]
     
-    \noindent\makebox[\linewidth]{\rule{.7\paperwidth}{.6pt}}\\[0.7cm]
+    \noindent\makebox[\linewidth]{\rule{.75\paperwidth}{.6pt}}\\[0.7cm]
 
     \large
     Prepared by \href{https://cyfrin.io}{Cyfrin}
