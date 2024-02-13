@@ -2,7 +2,7 @@
 ''' A pandoc filter that has the LaTeX writer use minted for typesetting code.
 
 Usage:
-    pandoc --filter ./minted.py -o myfile.tex myfile.md
+    pandoc --filter ./pandoc-minted.py -o myfile.tex myfile.md
 '''
 
 from string import Template

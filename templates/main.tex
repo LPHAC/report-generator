@@ -20,7 +20,14 @@
  % Math packages
 \usepackage{amsmath,amsfonts,amsthm}
 
-\usepackage[pdftex]{graphicx}	
+\makeatletter
+\def\maxwidth{\textwidth}
+\def\maxheight{0.8\textheight}
+\makeatother
+
+\usepackage[pdftex]{graphicx}
+\usepackage{placeins}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 
 % For hyphenation of texttt:
 % https://tex.stackexchange.com/questions/299/how-to-get-long-texttt-sections-to-break
