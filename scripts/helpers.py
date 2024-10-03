@@ -6,14 +6,6 @@ from os.path import exists as check_file
 import os
 import re
 import subprocess
-# from .linter import replace_ampersand_in_findings_headings
-
-def replace_ampersand_in_findings_headings(line):
-    # If the line is a finding markdown heading and contains '&', replace '&' with 'and'
-    if line.strip().startswith('###') and '&' in line:
-        line = line.replace('&', 'and')
-
-    return line
 
 # Define file paths
 SOURCE_PATH = './source/'
@@ -32,6 +24,13 @@ PREFIX_LABELS = ['C-', 'H-', 'M-', 'L-', 'I-', 'G-']
 
 # Possible status labels from github issues
 STATUS_LABELS = ['Verified Fix', 'Acknowledged', 'Wontfix']
+
+def replace_ampersand_in_findings_headings(line):
+    # If the line is a finding markdown heading and contains '&', replace '&' with 'and'
+    if line.strip().startswith('###') and '&' in line:
+        line = line.replace('&', 'and')
+
+    return line
 
 # Little helper to get issues with a certain label
 def get_issue_count(dict, label):
@@ -222,7 +221,6 @@ def get_issues(repository, github):
             continue
 
         fill = math.ceil(math.log10(count_by_severity[label]))
-        prefix = f"{label[10:11]}-"
 
         mitigation_table += f"{label.split()[0].upper()},,,\n"
 
@@ -231,8 +229,7 @@ def get_issues(repository, github):
             linted_title = replace_ampersand_in_findings_headings(issue_title)
             latex_hypertarget = markdown_heading_to_latex_hypertarget("### " + linted_title)
             prefixed_title = f"\hyperlink{{{latex_hypertarget}}}{{[{PREFIX_LABELS[SEVERITY_LABELS.index(label)]}{str(counter).zfill(fill)}] {format_inline_code(linted_title)}}}"
-            status_label = status_label.replace("Report Status: ", "")
-            summary_findings_table += f"{prefixed_title} & {status_label} \\\\\n\hline"
+            summary_findings_table += f"{prefixed_title} & \checkmark \space {status_label}\\\\\n\hline"
             mitigation_table += f"\"{linted_title}\",{status_label},,\n"
 
     # Replace the placeholder in the SUMMARY_TEX file

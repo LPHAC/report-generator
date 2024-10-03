@@ -15,41 +15,40 @@ However, it does not cover any partially paid invoices, meaning if a partially p
 
 **Proof of Concept:**
 ```solidity
-    function testWithdrawCausingDOSNoDeposits() public {
-        address firstDepositor = makeAddr("firstDepositor");
-        address secondDepositor = makeAddr("secondDepositor");
+function testWithdrawCausingDOSNoDeposits() public {
+    address firstDepositor = makeAddr("firstDepositor");
+    address secondDepositor = makeAddr("secondDepositor");
 
-        asset.mint(bob, 1e18);
-        vm.startPrank(bob);
-        asset.approve(address(bullaFactoring), 1e18);
-        asset.transfer(address(bullaFactoring), 1e18);
-        vm.stopPrank();
+    asset.mint(bob, 1e18);
+    vm.startPrank(bob);
+    asset.approve(address(bullaFactoring), 1e18);
+    asset.transfer(address(bullaFactoring), 1e18);
+    vm.stopPrank();
 
-        vm.startPrank(firstDepositor);
-        asset.approve(address(bullaFactoring), 1e25);
-        bullaFactoring.redeem(1e20, firstDepositor, firstDepositor);
-        vm.stopPrank();
+    vm.startPrank(firstDepositor);
+    asset.approve(address(bullaFactoring), 1e25);
+    bullaFactoring.redeem(1e20, firstDepositor, firstDepositor);
+    vm.stopPrank();
 
-        uint256 totalSupply = bullaFactoring.totalSupply();
-        assertEq(totalSupply, 0, "Total supply should be 0");
+    uint256 totalSupply = bullaFactoring.totalSupply();
+    assertEq(totalSupply, 0, "Total supply should be 0");
 
-        uint256 totalAssets = bullaFactoring.totalAssets();
-        assertEq(totalAssets, 0, "Total assets should be 0");
+    uint256 totalAssets = bullaFactoring.totalAssets();
+    assertEq(totalAssets, 0, "Total assets should be 0");
 
 
-        uint256 firstDepositAmount = 1e3;
+    uint256 firstDepositAmount = 1e3;
 
-        permitUser(firstDepositor, true, 10*firstDepositAmount);
+    permitUser(firstDepositor, true, 10*firstDepositAmount);
 
-        vm.startPrank(firstDepositor);
-        uint256 firstDepositorShares = bullaFactoring.deposit(firstDepositAmount, firstDepositor);
-        vm.stopPrank();
+    vm.startPrank(firstDepositor);
+    uint256 firstDepositorShares = bullaFactoring.deposit(firstDepositAmount, firstDepositor);
+    vm.stopPrank();
 
-        vm.startPrank(firstDepositor);
-        bullaFactoring.withdraw(1, firstDepositor, firstDepositor);
-        vm.stopPrank();
-    }
-
+    vm.startPrank(firstDepositor);
+    bullaFactoring.withdraw(1, firstDepositor, firstDepositor);
+    vm.stopPrank();
+}
 ```
 **Recommendation:** There are several recommendations for this issue:
 1. Avoid adding unnecessarily complexity to the `_redeem()` function. The requirement to cap `maxWithdrawableShares` is unnecessary, users would only be exceeding the required shares if they are burning non-existent shares.
@@ -328,13 +327,13 @@ The affected instances occur in the following lines:
 
 1. Line 207: Magic number `1000_0000` used, this is difficult to read and can cause issues in future development if misread. Recommend using `10_000_000`.
 2. Function `calculateRealizedGainLoss()` iterates through the same array twice unnecessarily between lines 258-261 and then 273-276. Recommend simplifying and minimising for loop iteration. Consider further amendments to this function by removing dead invoices out of the array we are iterating through for further efficiency improvements as well as preventing out of gas reverts when block gas limits are close to exhaustion.
-3. There are several places (for example in all redeem and withdraw function) where `owner` shadows StateVar `Ownable.owner`, it is advised not to shadow global variables as compiler errors may be introduced and unexpected behaviour may occur.
+3. There are several places (i.e. in the `redeem()` and `withdraw()` functions) where `owner` shadows `StateVar Ownable.owner`. It is advised not to shadow global variables as compiler errors may be introduced and unexpected behaviour may occur.
 
 **Recommendation:** Consider alterations where appropriate.
 
-**Bulla:** Partially resolved in [PR 94](https://github.com/bulla-network/factoring-contracts/pull/94).
+**Bulla:** Resolved in [PR 94](https://github.com/bulla-network/factoring-contracts/pull/94), [PR 95](https://github.com/bulla-network/factoring-contracts/pull/95) and [PR 96](https://github.com/bulla-network/factoring-contracts/pull/96).
 
-**LPHAC:** Verified partial fix, `calculateRealizedGainLoss()` has been refactored to avoid double iteration and the rest of this issue is marked as acknowledged.
+**LPHAC:** Verified fix.
 
 
 ### Share redemptions are not permissioned
