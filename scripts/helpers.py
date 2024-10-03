@@ -6,13 +6,19 @@ from os.path import exists as check_file
 import os
 import re
 import subprocess
-from .linter import replace_ampersand_in_findings_headings
+# from .linter import replace_ampersand_in_findings_headings
+
+def replace_ampersand_in_findings_headings(line):
+    # If the line is a finding markdown heading and contains '&', replace '&' with 'and'
+    if line.strip().startswith('###') and '&' in line:
+        line = line.replace('&', 'and')
+
+    return line
 
 # Define file paths
 SOURCE_PATH = './source/'
 OUTPUT_PATH = './output/'
 LEAD_AUDITORS = './source/lead_auditors.md'
-ASSISTING_AUDITORS = './source/assisting_auditors.md'
 SEVERITY_COUNTS = SOURCE_PATH + 'severity_counts.conf'
 SUMMARY_TEX = './templates/summary.tex'
 SUMMARY_INFORMATION = SOURCE_PATH + 'summary_information.conf'
@@ -21,10 +27,11 @@ OUTPUT_SOLODIT = OUTPUT_PATH + 'solodit_report.md'
 MITIGATION_TABLE = OUTPUT_PATH + 'mitigation_table.csv'
 
 # Possible severity labels from github issues
-SEVERITY_LABELS = ['Severity: Critical Risk', 'Severity: High Risk', 'Severity: Medium Risk', 'Severity: Low Risk', 'Severity: Informational', 'Severity: Gas Optimization']
+SEVERITY_LABELS = ['Critical', 'High', 'Medium', 'Low', 'Informational', 'Gas Optimization']
+PREFIX_LABELS = ['C-', 'H-', 'M-', 'L-', 'I-', 'G-']
 
 # Possible status labels from github issues
-STATUS_LABELS = ['Report Status: Open', 'Report Status: Acknowledged', 'Report Status: Resolved', 'Report Status: Closed']
+STATUS_LABELS = ['Verified Fix', 'Acknowledged', 'Wontfix']
 
 # Little helper to get issues with a certain label
 def get_issue_count(dict, label):
@@ -188,7 +195,7 @@ def get_issues(repository, github):
             if get_issue_count(issue_dict, label) == 0:
                 continue
 
-            report.write(f"## {label[10:]}\n")
+            report.write(f"## {label}\n")
             for content in issue_dict[label]:
                 report.write(content.replace("\r\n", "\n"))
             report.write("\n\\clearpage\n")
@@ -197,7 +204,7 @@ def get_issues(repository, github):
     with open(SEVERITY_COUNTS, "w") as counts_file:
         counts_file.write('[counts]' + '\n')
         for label in SEVERITY_LABELS:
-            variable_name = label[10:].lower().replace(" risk", "").replace(" ", "_") + " = "
+            variable_name = label.lower() + " = "
             count = get_issue_count(issue_dict, label)
             counts_file.write(variable_name + str(count) + '\n')
             count_by_severity[label] = count
@@ -208,7 +215,7 @@ def get_issues(repository, github):
         summary_tex_content = summary_file.read()
         
     summary_findings_table = ""
-    mitigation_table = f"Name,Status,{get_summary_information()['team_name']},Cyfrin\n"
+    mitigation_table = f"Name,Status,{get_summary_information()['team_name']},LPHAC\n"
     for label in SEVERITY_LABELS:
         # Do nothing if there are no issues with this label
         if get_issue_count(issue_dict, label) == 0:
@@ -217,13 +224,13 @@ def get_issues(repository, github):
         fill = math.ceil(math.log10(count_by_severity[label]))
         prefix = f"{label[10:11]}-"
 
-        mitigation_table += f"{label.split()[1].upper()},,,\n"
+        mitigation_table += f"{label.split()[0].upper()},,,\n"
 
         # Iterate through all findings for the current severity
         for counter, (issue_title, status_label) in enumerate(summary_of_findings[label], start=1):
             linted_title = replace_ampersand_in_findings_headings(issue_title)
             latex_hypertarget = markdown_heading_to_latex_hypertarget("### " + linted_title)
-            prefixed_title = f"\hyperlink{{{latex_hypertarget}}}{{[{prefix}{str(counter).zfill(fill)}] {format_inline_code(linted_title)}}}"
+            prefixed_title = f"\hyperlink{{{latex_hypertarget}}}{{[{PREFIX_LABELS[SEVERITY_LABELS.index(label)]}{str(counter).zfill(fill)}] {format_inline_code(linted_title)}}}"
             status_label = status_label.replace("Report Status: ", "")
             summary_findings_table += f"{prefixed_title} & {status_label} \\\\\n\hline"
             mitigation_table += f"\"{linted_title}\",{status_label},,\n"
@@ -362,12 +369,9 @@ def get_severity_counts():
     return counts
 
 def edit_report_md():
-    with open(LEAD_AUDITORS, 'r') as lead_auditors, open(ASSISTING_AUDITORS, 'r') as assisting_auditors, open(SOURCE_REPORT, 'r') as source_report, open(OUTPUT_SOLODIT, 'w') as solodit_report:
+    with open(LEAD_AUDITORS, 'r') as lead_auditors, open(SOURCE_REPORT, 'r') as source_report, open(OUTPUT_SOLODIT, 'w') as solodit_report:
         solodit_report.write('**Lead Auditors**\n\n')
         for line in lead_auditors:
-            solodit_report.write(line)
-        solodit_report.write('\n**Assisting Auditors**\n\n')
-        for line in assisting_auditors:
             solodit_report.write(line)
         solodit_report.write('\n\n---\n\n# Findings\n')
         for line in source_report:

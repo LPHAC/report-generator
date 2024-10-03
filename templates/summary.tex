@@ -46,7 +46,9 @@ In this period, a total of __PLACEHOLDER__ISSUE_TOTAL_COUNT issues were found.
     \hline
     Repository & \href{__PLACEHOLDER__REPO_LINK}{__PLACEHOLDER__REPO_NAME} \\
     \hline
-    Commit & \href{__PLACEHOLDER__COMMIT_HASH_LINK}{\truncatehash{__PLACEHOLDER__COMMIT_HASH}} \\
+    Initial Commit & \href{__PLACEHOLDER__INITIAL_COMMIT_HASH_LINK}{\truncatehash{__PLACEHOLDER__INITIAL_COMMIT_HASH}} \\
+    \hline
+    Final Commit & \href{__PLACEHOLDER__FINAL_COMMIT_HASH_LINK}{\truncatehash{__PLACEHOLDER__FINAL_COMMIT_HASH}} \\
     \hline
     Audit Timeline & __PLACEHOLDER__AUDIT_TIMELINE \\
     \hline
@@ -89,6 +91,20 @@ In this period, a total of __PLACEHOLDER__ISSUE_TOTAL_COUNT issues were found.
 \begin{longtable}{|p{12cm}|p{3cm}|}
   \caption*{\textbf{Summary of Findings}}
   % __PLACEHOLDER__SUMMARY_OF_FINDINGS_START
-    __PLACEHOLDER__SUMMARY_OF_FINDINGS
-  % __PLACEHOLDER__SUMMARY_OF_FINDINGS_END
+\hline\hyperlink{}{[H-1] Vault share manipulation attack by short-circuiting \texttt{maxRedeem}} & Verified Fix \\
+\hline\hyperlink{}{[M-1] \texttt{unfactorInvoice} does not consider partially paid invoice amounts} & Verified Fix \\
+\hline\hyperlink{}{[M-2] Fee changes are applied retroactively to active invoices} & Verified Fix \\
+\hline\hyperlink{}{[M-3] Interest tax is calculated to be a magnitude larger than the specified \texttt{taxBps}} & Verified Fix \\
+\hline\hyperlink{}{[L-1] Funded invoices can be re-approved by privileged accounts} & Verified Fix \\
+\hline\hyperlink{}{[L-2] Rounding errors in withdrawal allows for asset removal while retaining shares} & Verified Fix \\
+\hline\hyperlink{}{[L-3] Only \texttt{USDC} is supported as a primary asset for facilitating invoices} & Verified Fix \\
+\hline\hyperlink{}{[L-4] Potential mismatch in claim token and \texttt{BullaFactoring} asset} & Verified Fix \\
+\hline\hyperlink{}{[I-1] Multiple divisions can be simplified into a single operation} & Verified Fix \\
+\hline\hyperlink{}{[I-2] \texttt{pricePerShare} incorrectly scales shares based on \texttt{SCALING\_FACTOR}} & Verified Fix \\
+\hline\hyperlink{}{[I-3] \texttt{convertToShares} incorrectly scales when supply is zero} & Verified Fix \\
+\hline\hyperlink{}{[I-4] Code hygiene improvements} & Acknowledged \\
+\hline\hyperlink{}{[I-5] Share redemptions are not permissioned} & Verified Fix \\
+\hline\hyperlink{}{[I-6] Unnecessary double iteration of pool status arrays} & Verified Fix \\
+\hline
+% __PLACEHOLDER__SUMMARY_OF_FINDINGS_END
 \end{longtable}

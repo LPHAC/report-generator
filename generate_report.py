@@ -25,8 +25,10 @@ REPLACE_SUMMARY = [["__PLACEHOLDER__REVIEW_LENGTH", str(helpers.calculate_period
                    ["__PLACEHOLDER__PROJECT_NAME", summary_data['project_name']],
                    ["__PLACEHOLDER__REPO_LINK", summary_data['project_github']],
                    ["__PLACEHOLDER__REPO_NAME", source_repo_name],
-                   ["__PLACEHOLDER__COMMIT_HASH_LINK", re.sub(r'(\.git)?$', '', summary_data['project_github']) + "/blob/" + summary_data['commit_hash']],
-                   ["__PLACEHOLDER__COMMIT_HASH", summary_data['commit_hash']],
+                   ["__PLACEHOLDER__INITIAL_COMMIT_HASH_LINK", re.sub(r'(\.git)?$', '', summary_data['project_github']) + "/blob/" + summary_data['initial_commit_hash']],
+                   ["__PLACEHOLDER__INITIAL_COMMIT_HASH", summary_data['initial_commit_hash']],
+                   ["__PLACEHOLDER__FINAL_COMMIT_HASH_LINK", re.sub(r'(\.git)?$', '', summary_data['project_github']) + "/blob/" + summary_data['final_commit_hash']],
+                   ["__PLACEHOLDER__FINAL_COMMIT_HASH", summary_data['final_commit_hash']],
                    ["__PLACEHOLDER__AUDIT_TIMELINE", summary_data['review_timeline']],
                    ["__PLACEHOLDER__AUDIT_METHODS", summary_data['review_methods']]]
 
@@ -37,7 +39,7 @@ REPLACE_SEVERITIES = [["__PLACEHOLDER__ISSUE_CRITICAL_COUNT", severity_count_dat
                       ["__PLACEHOLDER__ISSUE_MEDIUM_COUNT", severity_count_data['medium']],
                       ["__PLACEHOLDER__ISSUE_LOW_COUNT", severity_count_data['low']],
                       ["__PLACEHOLDER__ISSUE_INFORMATIONAL_COUNT" ,severity_count_data['informational']],
-                      ["__PLACEHOLDER__ISSUE_GAS_OPTIMIZATION_COUNT", severity_count_data['gas_optimization']], 
+                      ["__PLACEHOLDER__ISSUE_GAS_OPTIMIZATION_COUNT", severity_count_data['gas optimization']], 
                       ["__PLACEHOLDER__ISSUE_TOTAL_COUNT", severity_count_data['total']]]
 
 
